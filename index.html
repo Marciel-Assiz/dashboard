@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="icon" type="image/png" href="/public/img/dashboard.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Marciel Assiz - marciel.emersom@gmail.com">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+
+
+    <!-- LINKS NOVOS TESTA-LOS ANTES -->
+    <link rel="apple-touch-icon" sizes="76x76" href="http://135.148.144.81/assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="http://135.148.144.81/assets/img/favicon.ico">
+    
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <!-- FIM DO LINKS -->
+
+ 
+
+	<!--Stylesheet local-->
+
+        <!-- CSS Files TESTAR ANTES -->
+    <!--link rel="stylesheet" href="http://135.148.144.81/assets/css/material-kit.css" NÃO USADO NO DASHBOARD -->
+    <link rel="stylesheet" href="http://135.148.144.81/assets/css/light-bootstrap-dashboard.css">
+    <link rel="stylesheet" href="/public/css/bootstrap_dash.min.css">
+    <link rel="stylesheet" href="/public/css/style_dash.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    
+
+    <title> Painel - Dashboard </title>
+</head>
+
+<body>
+    <div id="wait_a_moment" class="stop-wait"><i id="spinner" class="nc-icon nc-circle"></i>
+        <div class="progress-bottom">
+            <div id="progress_products" class=""></div>
+        </div>
+    </div><!-- espere um momento -->
+
+    <div class="wrapper" id="wrapper">
+        <div class="sidebar">
+            <!--
+         Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+        Tip 2: you can also add an image using data-image tag
+        -->
+            <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="/painel" class="simple-text">
+                    <!--img src="/img/logo-links.png" width="100" heigt="100" alt="logo-painel"-->
+                </a>
+            </div>
+            <ul class="nav">
+                <li>
+                    <a class="nav-link" href="http://135.148.144.81/painel/contatos">
+                        <i class="nc-icon nc-chat-round"></i>
+                        <p>Fale Conosco</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="http://135.148.144.81/painel/gestao_de_pedidos">
+                    <i class="nc-icon nc-bullet-list-67"></i>  
+                        <p>Pedidos</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="http://135.148.144.81/painel/produtos">
+                        <i class="nc-icon nc-notes"></i>
+                        <p>Produtos Lista</p>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link">
+                        <i class="nc-icon nc-zoom-split" onclick="SearchProduct();"></i>
+                        <p><input type="search" id="search" class="search-nav-link" placeholder="BUSCAR PRODUTOS.." onkeyup="SearchProduct();"></p>
+                    </a>
+                </li>      
+                <li>
+                    <a class="nav-link nav-link-links" href="/painel/settings">
+                        <i class="nc-icon nc-settings-gear-64"></i>
+                        <p>Configurações</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div>
+        <div id="search_area" class="search-area">
+            <h4><span id="keyword"></span><span id="result_query" class="result-query"></span></h4>
+
+            <table id="search_table" class="table table-striped d-none">
+                <thead>
+                    <tr>
+                        <th> Item </th>
+                        <th> Nome / Descrição </th>
+                        <th> Estação </th>
+                        <th> Preço Venda </th>
+                        <th> Editar</th>
+                        <th> Tot Variações </th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_products"></tbody>                            
+            </table>
+            <script type="text/javascript" id="table_script"></script>  
+
+        </div>
+
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-linke" color-on-scroll="500">
+                <div class=" container-fluid">
+                    <a class="navbar-brand" href="http://135.148.144.81/painel"> Dashboard</a>
+                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <ul class="nav navbar-nav mr-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <i class="nc-icon nc-planet"></i>
+                                    <span id="notifyCircle" class="notification d-none">0</span>
+                                    <span class="">&nbsp; Notificação</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a id="dropdownNotify" class="dropdown-item" href="#"></a>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown2" aria-haspopup="true" aria-expanded="false">
+                                    <span class="no-icon">Marciel E Assiz</span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a href="/logout" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
+                                    <form id="logout-form" action="http://135.148.144.81/logout" method="POST" style="display: none;">
+                                        <input type="hidden" name="_token" value="UXxScbskAw2VNyCBvXEBO1xG9c6pHhEIDSF2t2WW">dropdown
+                                    </form>
+                                    <div class="divider"></div>
+                                    <a class="dropdown-item" href="#">Outras Opções</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/logout" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <span class="no-icon">Sair</span>
+                                    <form id="logout-form" action="http://135.148.144.81/logout" method="POST" style="display: none;">
+                                        <input type="hidden" name="_token" value="UXxScbskAw2VNyCBvXEBO1xG9c6pHhEIDSF2t2WW">dropdown
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            
+<div class="container-fluid">
+	<div class="row">
+		<div class="container container_center">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<h1 class="title-pg">Listagem dos Produtos</h1>
+				<a href="http://135.148.144.81/painel/produtos/create" class="btn btn_enviar_pag_edit_prod"><span class="glyphicon glyphicon-plus"></span> Cadastrar um Novo Produto</a></br></br>
+			</div>
+		</div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>
+						<h6>Item</h6>
+					</th>
+					<th>
+						<h6>Nome / Descrição</h6>
+					</th>
+					<th>
+						<h6>Estação</h6>
+					</th>
+					<th>
+						<h6>Preço Venda</h6>
+					</th>
+					<th>
+						<h6>Ações</h6>
+					</th>
+					<th>
+						<h6>Variações</h6>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+													<tr id="tr_1">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/conjunto-moletom-peluciado-infantil-masculino-explorer-caramelo.png" alt="" height="50" width="50">
+					</td>
+					<td>Conjunto moletom peluciado infantil masculino explorer caramelo</td>
+
+					<td>
+						<select id="select_season1" onchange="ChooseSeason1()">
+														<option value="Outono-inverno" selected>Outono-inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save1" class="btn btn-success d-none" onclick="ChooseSeason1(id)">Salvar</button>
+						<script>
+							function ChooseSeason1(id) {
+								document.getElementById("btn_save1").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save1").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save1").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season1").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/1',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda1">79.9</td>
+						<script>
+							document.getElementById('preco_venda1').innerHTML = parseFloat(79.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/1"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/1/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_1">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="modalLabel_1" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_1">Confirma a exclusão do Produto: Conjunto moletom peluciado infantil masculino explorer caramelo?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="1" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=1">
+							<button class="btn btn-success">(3) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_2">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/conjunto-moletom-peluciado-infantil-masculino-explorer-caramelo.png" alt="" height="50" width="50">
+					</td>
+					<td>Conjunto moletom peluciado infantil masculino explorer caramelo</td>
+
+					<td>
+						<select id="select_season2" onchange="ChooseSeason2()">
+														<option value="Outono/Inverno" selected>Outono/Inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save2" class="btn btn-success d-none" onclick="ChooseSeason2(id)">Salvar</button>
+						<script>
+							function ChooseSeason2(id) {
+								document.getElementById("btn_save2").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save2").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save2").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season2").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/2',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda2">79.9</td>
+						<script>
+							document.getElementById('preco_venda2').innerHTML = parseFloat(79.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/2"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/2/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_2">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_2" tabindex="-1" role="dialog" aria-labelledby="modalLabel_2" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_2">Confirma a exclusão do Produto: Conjunto moletom peluciado infantil masculino explorer caramelo?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="2" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=2">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_3">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/conjunto-moletom-peluciado-infantil-masculino-explorer-caramelo.png" alt="" height="50" width="50">
+					</td>
+					<td>Conjunto moletom peluciado infantil masculino explorer caramelo</td>
+
+					<td>
+						<select id="select_season3" onchange="ChooseSeason3()">
+														<option value="Outono-inverno" selected>Outono-inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save3" class="btn btn-success d-none" onclick="ChooseSeason3(id)">Salvar</button>
+						<script>
+							function ChooseSeason3(id) {
+								document.getElementById("btn_save3").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save3").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save3").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season3").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/3',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda3">79.9</td>
+						<script>
+							document.getElementById('preco_venda3').innerHTML = parseFloat(79.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/3"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/3/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_3">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_3" tabindex="-1" role="dialog" aria-labelledby="modalLabel_3" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_3">Confirma a exclusão do Produto: Conjunto moletom peluciado infantil masculino explorer caramelo?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="3" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=3">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_4">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/conj-molet-pelucia-inf-fem-hello-friends.png" alt="" height="50" width="50">
+					</td>
+					<td>Conjunto Moletom Peluciado Infantil Feminino Hello Friends - Off-White</td>
+
+					<td>
+						<select id="select_season4" onchange="ChooseSeason4()">
+														<option value="Outono-inverno" selected>Outono-inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save4" class="btn btn-success d-none" onclick="ChooseSeason4(id)">Salvar</button>
+						<script>
+							function ChooseSeason4(id) {
+								document.getElementById("btn_save4").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save4").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save4").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season4").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/4',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda4">79.9</td>
+						<script>
+							document.getElementById('preco_venda4').innerHTML = parseFloat(79.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/4"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/4/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_4">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_4" tabindex="-1" role="dialog" aria-labelledby="modalLabel_4" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_4">Confirma a exclusão do Produto: Conjunto Moletom Peluciado Infantil Feminino Hello Friends - Off-White?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="4" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=4">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_5">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/conjMoletPeluciInfantFemDinoRosa.png" alt="" height="50" width="50">
+					</td>
+					<td>Conjuto Moletom Pelucia Infant Fem Faella Dino - Rosa Pink</td>
+
+					<td>
+						<select id="select_season5" onchange="ChooseSeason5()">
+														<option value="Outono-inverno" selected>Outono-inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save5" class="btn btn-success d-none" onclick="ChooseSeason5(id)">Salvar</button>
+						<script>
+							function ChooseSeason5(id) {
+								document.getElementById("btn_save5").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save5").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save5").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season5").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/5',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda5">79.9</td>
+						<script>
+							document.getElementById('preco_venda5').innerHTML = parseFloat(79.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/5"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/5/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_5">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_5" tabindex="-1" role="dialog" aria-labelledby="modalLabel_5" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_5">Confirma a exclusão do Produto: Conjuto Moletom Pelucia Infant Fem Faella Dino - Rosa Pink?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="5" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=5">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_6">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/vestidoInfantFemHelloSumRosaPink.png" alt="" height="50" width="50">
+					</td>
+					<td>Vestido Infantil Verão Fem Hello Summer Rosa Pink</td>
+
+					<td>
+						<select id="select_season6" onchange="ChooseSeason6()">
+														<option value="Primavera-verão" selected>Primavera-verão</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save6" class="btn btn-success d-none" onclick="ChooseSeason6(id)">Salvar</button>
+						<script>
+							function ChooseSeason6(id) {
+								document.getElementById("btn_save6").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save6").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save6").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season6").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/6',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda6">49.9</td>
+						<script>
+							document.getElementById('preco_venda6').innerHTML = parseFloat(49.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/6"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/6/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_6">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_6" tabindex="-1" role="dialog" aria-labelledby="modalLabel_6" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_6">Confirma a exclusão do Produto: Vestido Infantil Verão Fem Hello Summer Rosa Pink?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="6" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=6">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_7">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/VestidoInfantVeraoFemLoveCatAzul.png" alt="" height="50" width="50">
+					</td>
+					<td>Vestido Infantil Verão Menina Love Azul - Outlet</td>
+
+					<td>
+						<select id="select_season7" onchange="ChooseSeason7()">
+														<option value="Primavera-verão" selected>Primavera-verão</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save7" class="btn btn-success d-none" onclick="ChooseSeason7(id)">Salvar</button>
+						<script>
+							function ChooseSeason7(id) {
+								document.getElementById("btn_save7").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save7").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save7").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season7").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/7',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda7">49.9</td>
+						<script>
+							document.getElementById('preco_venda7').innerHTML = parseFloat(49.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<a href="http://135.148.144.81/painel/produtos/7/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_7">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_7" tabindex="-1" role="dialog" aria-labelledby="modalLabel_7" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_7">Confirma a exclusão do Produto: Vestido Infantil Verão Menina Love Azul - Outlet?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="7" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=7">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_8">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/JaquetaBebeCozyClubMarron.png" alt="" height="50" width="50">
+					</td>
+					<td>Jaqueta Bebe Cozy Club Marron</td>
+
+					<td>
+						<select id="select_season8" onchange="ChooseSeason8()">
+														<option value="Inverno" selected>Inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save8" class="btn btn-success d-none" onclick="ChooseSeason8(id)">Salvar</button>
+						<script>
+							function ChooseSeason8(id) {
+								document.getElementById("btn_save8").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save8").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save8").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season8").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/8',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda8">49.9</td>
+						<script>
+							document.getElementById('preco_venda8').innerHTML = parseFloat(49.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/8"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/8/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_8">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_8" tabindex="-1" role="dialog" aria-labelledby="modalLabel_8" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_8">Confirma a exclusão do Produto: Jaqueta Bebe Cozy Club Marron?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="8" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=8">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_9">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/SapatinhoMeiaConfort-6-24-meses.png" alt="" height="50" width="50">
+					</td>
+					<td>Sapatinho Meia Confort Bebes de 6 á 24 Meses</td>
+
+					<td>
+						<select id="select_season9" onchange="ChooseSeason9()">
+														<option value="Outono-inverno" selected>Outono-inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save9" class="btn btn-success d-none" onclick="ChooseSeason9(id)">Salvar</button>
+						<script>
+							function ChooseSeason9(id) {
+								document.getElementById("btn_save9").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save9").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save9").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season9").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/9',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda9">129.9</td>
+						<script>
+							document.getElementById('preco_venda9').innerHTML = parseFloat(129.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/9"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/9/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_9">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_9" tabindex="-1" role="dialog" aria-labelledby="modalLabel_9" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_9">Confirma a exclusão do Produto: Sapatinho Meia Confort Bebes de 6 á 24 Meses?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="9" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=9">
+							<button class="btn btn-success">(1) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_10">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/SapatinhoMeiaConfort-6-24-meses2.png" alt="" height="50" width="50">
+					</td>
+					<td>Sapatinho Meia Confort Bebes de 6 á 24 Meses</td>
+
+					<td>
+						<select id="select_season10" onchange="ChooseSeason10()">
+														<option value="Outono/Inverno" selected>Outono/Inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save10" class="btn btn-success d-none" onclick="ChooseSeason10(id)">Salvar</button>
+						<script>
+							function ChooseSeason10(id) {
+								document.getElementById("btn_save10").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save10").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save10").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season10").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/10',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda10">129.9</td>
+						<script>
+							document.getElementById('preco_venda10').innerHTML = parseFloat(129.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/10"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/10/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_10">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_10" tabindex="-1" role="dialog" aria-labelledby="modalLabel_10" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_10">Confirma a exclusão do Produto: Sapatinho Meia Confort Bebes de 6 á 24 Meses?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="10" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=10">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_11">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/JaqMoletomInfantMeninoBrandili.png" alt="" height="50" width="50">
+					</td>
+					<td>Jaqueta Moletom Infantil Menino Brandili</td>
+
+					<td>
+						<select id="select_season11" onchange="ChooseSeason11()">
+														<option value="Outono-inverno" selected>Outono-inverno</option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save11" class="btn btn-success d-none" onclick="ChooseSeason11(id)">Salvar</button>
+						<script>
+							function ChooseSeason11(id) {
+								document.getElementById("btn_save11").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save11").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save11").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season11").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/11',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda11">73.9</td>
+						<script>
+							document.getElementById('preco_venda11').innerHTML = parseFloat(73.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/11"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/11/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_11">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_11" tabindex="-1" role="dialog" aria-labelledby="modalLabel_11" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_11">Confirma a exclusão do Produto: Jaqueta Moletom Infantil Menino Brandili?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="11" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=11">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+													<tr id="tr_12">
+										<td>
+												<img src="http://135.148.144.81/storage/produtos/conjunto-moletom-peluciado-infantil-masculino-explorer-caramelo.png" alt="" height="50" width="50">
+					</td>
+					<td>Conjunto moletom peluciado infantil masculino explorer caramelo</td>
+
+					<td>
+						<select id="select_season12" onchange="ChooseSeason12()">
+														<option></option>	
+														<option value="Primavera">Primavera</option>
+							<option value="Verão">Verão</option>
+							<option value="Outono">Outono</option>
+							<option value="Inverno">Inverno</option>
+							<option value="Primavera-verão">Primavera/Verão</option>
+							<option value="Outono-inverno">Outono/Inverno</option>
+						</select>
+						<button id="btn_save12" class="btn btn-success d-none" onclick="ChooseSeason12(id)">Salvar</button>
+						<script>
+							function ChooseSeason12(id) {
+								document.getElementById("btn_save12").classList.remove("d-none"); // mostra btn salvar
+								document.getElementById("btn_save12").classList.add("btn-success"); // mostra btn salvar
+								document.getElementById("btn_save12").innerHTML = "Salvar"; 
+								if(id != null) {
+									var season = document.getElementById("select_season12").selectedOptions[0].outerText; // pega a opção escolhida no select
+									document.getElementById(id).innerHTML = "Salvando..";
+									var user = localStorage.getItem("user"); user = JSON.parse(user);
+
+									$.ajax({
+										url:'/api/products-edit/12',  
+										data: { seasonal_product: season, user_id: user.id, user_name:user.name},
+										complete: function (response) {
+											document.getElementById(id).innerHTML = "Salvo";
+											document.getElementById(id).classList.remove("btn-success");
+											LoadProducts();
+											console.log(response.responseText);
+										},
+										error: function () {
+											alert('Erro: '+error);
+										}
+									});
+									console.log("Estação escolhida: "+season);
+								}
+							}
+						</script>
+					</td>
+
+					<td id="preco_venda12">79.9</td>
+						<script>
+							document.getElementById('preco_venda12').innerHTML = parseFloat(79.9).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						</script>
+					<td class="td-actions">
+						<!--a href="http://135.148.144.81/painel/produtos/12"> 
+						<button type="button" rel="tooltip" title="Ver Produto" class="btn btn-info btn-simple btn-xs">
+							<i class="material-icons">visibility</i>
+						</button>
+						</a-->
+						<!-- Link para mostrar o produto, produto/show/id -->
+						<a href="http://135.148.144.81/painel/produtos/12/edit">
+							<button type="button" rel="tooltip" title="Editar Produto" class="btn btn-success btn-simple btn-xs">
+								<i class="fa fa-edit"></i>
+							</button>
+						</a>&nbsp &nbsp &nbsp
+						<!-- Button trigger modal -->
+						 
+						<a rel="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modal_12">
+							<button type="button" rel="tooltip" title="Excluir Produto" class="btn btn-danger btn-simple btn-xs">
+								<i class="fa fa-times"></i>
+							</button>
+						</a>
+							
+						<!-- Modal -->
+						<div class="modal fade" id="modal_12" tabindex="-1" role="dialog" aria-labelledby="modalLabel_12" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title text-center" id="modalLabel_12">Confirma a exclusão do Produto: Conjunto moletom peluciado infantil masculino explorer caramelo?</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body"></div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" id="12" onclick="DeleteProduct(id);" rel="tooltip" data-dismiss="modal" title="Excluir Produto" class="btn btn-danger btn-simple">
+										Excluir Este produto <i class="fa fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+						<a href="/painel/produtos/create?same_product=12">
+							<button class="btn btn-success">(0) Adicionar</button>
+						</a>
+					</td>
+				</tr>
+							</tbody>
+		</table>
+
+		
+	</div>
+</div>
+        </div>
+    </div>
+
+    
+	<!-- DESSE PONTO ATÉ É O "body" QUE COMEÇA O CONTEUDO DA PAG A CARREGAR ESSE TAMPLATE-->   
+</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!--script src="../../../assets/js/chartist.min.js"></script-->
+    <script src="/public/js/bootstrap-notify.js" type="text/javascript"></script>
+    <script src="/public/js/bootstrap.min_dash.js" type="text/javascript"></script>
+    <script src="/public/js/light-bootstrap-dashboard.js"></script>
+    <script src="/public/js/demo.js"></script>
+    <script src="/public/js/template_painel.js"></script>
+</html>
